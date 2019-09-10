@@ -173,7 +173,7 @@ def N_L_Population_Plotter(n_l_pop, TDSE_file, Target_file, m_value = None, vmax
 
 
     if m_value == None:
-        plt.title("N and L states population for Counter-Rotating", fontsize=11)
+        plt.title("N and L states population for Co-Rotating", fontsize=11)
     else:
         plt.title("N and L states population for m = " + str(m_value))
     
@@ -199,9 +199,9 @@ def N_L_Population_Fixed_M(n_l_pop_fixed_m, TDSE_file, Target_file):
         if abs(m) > 3: #n_max - 1:
             continue
         if m >= 0:
-            file_name = "Population_Counter-Rotating_For_M=" + str(m).zfill(2) + ".png" 
+            file_name = "Population_Co-Rotating_For_M=" + str(m).zfill(2) + ".png" 
         else:
-            file_name = "Population_Counter-Rotating_For_M=" + str(m).zfill(3) + ".png"
+            file_name = "Population_Co-Rotating_For_M=" + str(m).zfill(3) + ".png"
         N_L_Population_Plotter(n_l_pop_fixed_m[m], TDSE_file, Target_file, m, vmax, file_name)
 
 def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax = None, file_name = "N_M_Population_Co_Rotating.png"):
@@ -259,9 +259,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
     plt.ylabel('n_values', fontsize=12)
 
     if l_value == None:
-        plt.title("N and M states population Counter_Rotating", fontsize=12)
+        plt.title("N and M states population Co_Rotating", fontsize=12)
     else:
-        plt.title("N and M states population Counter_Rotating for l = " + str(l_value), fontsize=12)
+        plt.title("N and M states population Co_Rotating for l = " + str(l_value), fontsize=12)
 
     plt.savefig(file_name)
     plt.show()

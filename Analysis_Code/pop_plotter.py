@@ -6,8 +6,8 @@ import Module
 
 
 Populations, n_l_pops, l_m_pops, n_m_pops, n_l_pop_fixed_ms, n_m_pop_fixed_ls, TDSE_files, Target_files, file_names = Module.File_Organizer(sys.argv)
-Module.N_L_Population_Plotter(n_l_pops[0], TDSE_files[0], Target_files[0], file_name = "Counter_Rotating.png")
-Module.N_M_Population_Plotter(n_m_pops[0], TDSE_files[0], Target_files[0], file_name = "N_M_Population_Counter_Rotating.png")
+Module.N_L_Population_Plotter(n_l_pops[0], TDSE_files[0], Target_files[0], file_name = "Co_Rotating.png")
+Module.N_M_Population_Plotter(n_m_pops[0], TDSE_files[0], Target_files[0], file_name = "N_M_Population_Co_Rotating.png")
 Module.N_L_Population_Fixed_M(n_l_pop_fixed_ms[0], TDSE_files[0], Target_files[0])
 # Module.N_M_Population_Fixed_L(n_m_pop_fixed_ls[0], TDSE_files[0], Target_files[0])
 

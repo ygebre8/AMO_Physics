@@ -42,7 +42,11 @@ for i in range(0, int(sys.argv[1])):
 x_min = 0
 x_max = 25
 ax1.set_xlim([x_min, x_max])
-ax1.set_ylim(ymin=1e-10)
-ax1.set_title(sys.argv[2] + sys.argv[3])
-plt.savefig("HHG.png")
+ax1.set_ylim(ymin=1e-8)
+ax1.set_title("Co Rotating-base case")
+
+for i in np.arange(3, 25, 3):
+    plt.axvline(x=i, color="r")
+plt.xticks(np.arange(1, 25, 1)) 
+plt.savefig("base_case_co.png")
 plt.show()

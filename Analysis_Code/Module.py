@@ -56,6 +56,7 @@ def Population_Calculator(TDSE_file, Target_file, T_P_WF, F_F_WF):
     n_m_pop = {}
     n_l_pop_fixed_m = {}
     n_m_pop_fixed_l = {}
+    l_m_pop_fixed_n = {}
 
     l_values = np.array(TDSE_file['Wavefunction']['l_values'])
     m_values = np.array(TDSE_file['Wavefunction']['m_values'])
@@ -77,6 +78,7 @@ def Population_Calculator(TDSE_file, Target_file, T_P_WF, F_F_WF):
             for n in range(l + 1, n_max + 1):
                     n_m_pop[(n, m)] = pow(10, -20)
 
+
     for m in range(-1 * m_max, m_max + 1):
         n_l_pop_fixed_m[m] = {}
         for l in range(n_max):
@@ -89,6 +91,15 @@ def Population_Calculator(TDSE_file, Target_file, T_P_WF, F_F_WF):
             for m in range(-1 * l, l + 1):        
                 n_m_pop_fixed_l[l][(n, m)] = pow(10, -20)
 
+    
+    for n in range(1, n_max + 1):
+        l_m_pop_fixed_n[n] = {}
+        for l in range(0, n):
+            for m in range(-1 * l, l + 1):  
+                l_m_pop_fixed_n[n][(l, m)] = pow(10, -20)
+    
+
+
     for l, m  in zip(l_values, m_values):
         for n in range(l + 1, n_max + 1):
             Population[(n, l, m)] = np.vdot(F_F_WF[(n, l)], T_P_WF[(l, m)])
@@ -100,6 +111,8 @@ def Population_Calculator(TDSE_file, Target_file, T_P_WF, F_F_WF):
 
             n_l_pop_fixed_m[m][(n, l)] = n_l_pop_fixed_m[m][(n, l)] + Population[(n,l,m)]
             n_m_pop_fixed_l[l][(n, m)] = n_m_pop_fixed_l[l][(n, m)] + Population[(n,l,m)]
+            
+            l_m_pop_fixed_n[n][(l, m)] = l_m_pop_fixed_n[n][(l, m)] + Population[(n,l,m)]
 
     # Pop_json = {}
     # for k in Population.keys():
@@ -108,7 +121,7 @@ def Population_Calculator(TDSE_file, Target_file, T_P_WF, F_F_WF):
     # file = open("Population_co_rotating.json", "w")
     # file.write(j)
     # file.close()
-    return (Population, n_l_pop, l_m_pop, n_m_pop, n_l_pop_fixed_m, n_m_pop_fixed_l)
+    return (Population, n_l_pop, l_m_pop, n_m_pop, n_l_pop_fixed_m, n_m_pop_fixed_l, l_m_pop_fixed_n)
 
 def N_L_Population_Plotter(n_l_pop, TDSE_file, Target_file, m_value = None, vmax = None, file_name = "N_L_Population.png"):
     l_values = np.array(TDSE_file['Wavefunction']['l_values'])
@@ -150,9 +163,11 @@ def N_L_Population_Plotter(n_l_pop, TDSE_file, Target_file, m_value = None, vmax
         else:
             vmaxlog = int(np.log10(vmax))
     
-    label = [pow(10, i) for i in range(vmaxlog - 7, vmaxlog)]
+    vmaxlog = -2 
+    print(vmaxlog)
+    label = [pow(10, i) for i in range(vmaxlog - 5, vmaxlog)]
     vmax_num = pow(10, vmaxlog)
-    vmin_num = pow(10, -10)
+    vmin_num = pow(10, vmaxlog - 5)
     
     
     
@@ -173,7 +188,7 @@ def N_L_Population_Plotter(n_l_pop, TDSE_file, Target_file, m_value = None, vmax
 
 
     if m_value == None:
-        plt.title("N and L states population for Co-Rotating", fontsize=11)
+        plt.title("N and L states population for Counter-Rotating", fontsize=11)
     else:
         plt.title("N and L states population for m = " + str(m_value))
     
@@ -196,15 +211,15 @@ def N_L_Population_Fixed_M(n_l_pop_fixed_m, TDSE_file, Target_file):
         if(vmax_current > vmax):
             vmax = vmax_current
     for m in n_l_pop_fixed_m.keys():
-        if abs(m) > 3: #n_max - 1:
+        if abs(m) > 10: #n_max - 1:
             continue
         if m >= 0:
-            file_name = "Population_Co-Rotating_For_M=" + str(m).zfill(2) + ".png" 
+            file_name = "Population_Counter-Rotating_For_M=" + str(m).zfill(2) + ".png" 
         else:
-            file_name = "Population_Co-Rotating_For_M=" + str(m).zfill(3) + ".png"
+            file_name = "Population_Counter-Rotating_For_M=" + str(m).zfill(3) + ".png"
         N_L_Population_Plotter(n_l_pop_fixed_m[m], TDSE_file, Target_file, m, vmax, file_name)
 
-def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax = None, file_name = "N_M_Population_Co_Rotating.png"):
+def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax = None, file_name = "N_M_Population_Counter_Rotating.png"):
     
     n_max = int(Target_file['Energy_l_0'].size / 2)
     n_values = np.arange(1, n_max + 1)
@@ -233,9 +248,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
         else:
             vmaxlog = int(np.log10(vmax))
     
-    label = [pow(10, i) for i in range(vmaxlog - 5, vmaxlog)]
+    label = [pow(10, i) for i in range(vmaxlog - 7, vmaxlog)]
     vmax_num = pow(10, vmaxlog)
-    vmin_num = pow(10, -10)
+    vmin_num = pow(10,  -10)
 
     for n in n_values:
         for m in m_values:
@@ -248,7 +263,7 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
 
 
     axes = sns.heatmap(heat_map, norm=colors.LogNorm(), yticklabels=ylabel, xticklabels=xlabel, linewidths=.5, 
-    cmap="cool", annot=False, cbar_kws={"ticks":label},  vmin=vmin_num, vmax=vmax_num)
+    cmap="viridis", annot=False, cbar_kws={"ticks":label},  vmin=vmin_num, vmax=vmax_num)
 
     plt.ylim(1, n_max + 1)
     # if(l_value == None):
@@ -259,9 +274,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
     plt.ylabel('n_values', fontsize=12)
 
     if l_value == None:
-        plt.title("N and M states population Co_Rotating", fontsize=12)
+        plt.title("N and M states population Counter_Rotating", fontsize=12)
     else:
-        plt.title("N and M states population Co_Rotating for l = " + str(l_value), fontsize=12)
+        plt.title("N and M states population Counter_Rotating for l = " + str(l_value), fontsize=12)
 
     plt.savefig(file_name)
     plt.show()
@@ -276,10 +291,22 @@ def N_M_Population_Fixed_L(n_m_pop_fixed_l, TDSE_file, Target_file):
     for l in n_m_pop_fixed_l.keys():
         if l > 5:#n_max - 1:
             continue
-        file_name = "N_M_Population_Co_Rotating_For_L=" + str(l).zfill(4) + ".png"    
+        file_name = "N_M_Population_Counter_Rotating_For_L=" + str(l).zfill(4) + ".png"    
         N_M_Population_Plotter(n_m_pop_fixed_l[l], TDSE_file, Target_file, l, vmax, file_name)
 
-def L_M_Population_Plotter(l_m_pop, TDSE_file, Target_file, vmax = None, file_name = "L_M_Population.png"):
+def L_M_Population_Fixed_N(l_m_pop_fixed_n, TDSE_file, Target_file):
+    n_max = int(Target_file['Energy_l_0'].size / 2)
+    vmax = pow(10, -20)
+    for n in l_m_pop_fixed_n.keys():
+        vmax_current = Max_Elements(l_m_pop_fixed_n[n])[1]
+        if(vmax_current > vmax):
+            vmax = vmax_current
+    for n in l_m_pop_fixed_n.keys():
+        file_name = "Population_Counter-Rotating_For_N=" + str(n).zfill(2) + ".png"
+        L_M_Population_Plotter(l_m_pop_fixed_n[n], TDSE_file, Target_file, n, vmax, file_name)
+ 
+def L_M_Population_Plotter(l_m_pop, TDSE_file, Target_file, n_value = None, vmax = None, file_name = "L_M_Population.png"):
+    
     n_max = int(Target_file['Energy_l_0'].size / 2)
     n_values = np.arange(1, n_max + 1)
     l_values = np.array(TDSE_file['Wavefunction']['l_values'])
@@ -288,12 +315,6 @@ def L_M_Population_Plotter(l_m_pop, TDSE_file, Target_file, vmax = None, file_na
     m_max = 2 * np.amax(m_values) + 1
     heat_map = np.zeros(shape=(l_max, m_max))
     
-    for l, m  in zip(l_values, m_values):
-        try:
-            heat_map[l][m + np.amax(m_values)] = l_m_pop[l, m]
-            # print((l,m,l_m_population[l, m]))
-        except:
-            heat_map[l][m + np.amax(m_values)] = pow(10, -20)
 
     figure, axes = plt.subplots()
     xticks = np.arange(-1 * np.amax(m_values), np.amax(m_values) + 1)
@@ -315,10 +336,17 @@ def L_M_Population_Plotter(l_m_pop, TDSE_file, Target_file, vmax = None, file_na
             vmaxlog = -20
         else:
             vmaxlog = int(np.log10(vmax))
-    print(max_elements)
+    
     label = [pow(10, i) for i in range(vmaxlog - 5, vmaxlog)]
     vmax_num = pow(10, vmaxlog)
     vmin_num = pow(10, -10)
+
+    for l, m  in zip(l_values, m_values):
+        try:
+            heat_map[l][m + np.amax(m_values)] = l_m_pop[l, m]
+            # print((l,m,l_m_population[l, m]))
+        except:
+            heat_map[l][m + np.amax(m_values)] = pow(10, -20)
 
     axes = sns.heatmap(heat_map, norm=colors.LogNorm(), yticklabels=ylabel, xticklabels=xlabel, linewidths=.5, 
     cmap="cool", annot=False, cbar_kws={"ticks":label},  vmin=vmin_num, vmax=vmax_num)
@@ -327,6 +355,11 @@ def L_M_Population_Plotter(l_m_pop, TDSE_file, Target_file, vmax = None, file_na
     plt.xlim(np.amax(m_values) - n_max + 1, np.amax(m_values) + n_max)
     plt.xlabel('m_values', fontsize=12)
     plt.ylabel('l_values', fontsize=12)
+
+    if n_value == None:
+        plt.title("L and M states population for Counter-Rotating", fontsize=11)
+    else:
+        plt.title("L and M states population for N = " + str(n_value))
 
     plt.savefig(file_name)
     plt.show()
@@ -481,8 +514,8 @@ def HHG_Spectrum(TDSE_file, Pulse_file, file_name):
                     HHG_spec = data
                     Harmonic = np.arange(data.shape[0]) * dH
 
-    np.savetxt(file_name + "/Harmonic.txt", Harmonic)
-    np.savetxt(file_name + "/HHG_Spectrum.txt", HHG_spec)    
+    np.savetxt("Harmonic.txt", Harmonic)
+    np.savetxt("HHG_Spectrum.txt", HHG_spec)    
 
 def shifted_energy(TDSE_file, pulse_idx=0):
     # central frequency of A field (hbar=1)
@@ -516,7 +549,8 @@ def Ionization_Rate(Populations):
         ion_rate = 0.0
         for k in Pop.keys():
             ion_rate += Pop[k]
-        Ion_Rate.append(1.00 - ion_rate)
+
+        Ion_Rate.append((1.00 - ion_rate)*100)
 
     return Ion_Rate
 
@@ -525,6 +559,7 @@ def File_Organizer(command_line_arg):
     file_names = []
     TDSE_files = []
     Target_files = []
+    Pulse_files = []
     T_P_WFs = []
     F_F_WFs = []
     Populations = []
@@ -533,6 +568,7 @@ def File_Organizer(command_line_arg):
     n_m_pops = []
     n_l_pop_fixed_ms = []
     n_m_pop_fixed_ls = []
+    l_m_pop_fixed_ns = []
 
     for i in range(2, 2 + num_of_files):
         file_names.append(command_line_arg[i])
@@ -540,20 +576,22 @@ def File_Organizer(command_line_arg):
     for file in file_names:
         TDSE_files.append(h5py.File(file + "/TDSE.h5"))
         Target_files.append(h5py.File(file + "/Hydrogen.h5"))
+        Pulse_files.append(h5py.File(file + "/Pulse.h5"))
 
     for TDSE, Target in zip(TDSE_files, Target_files):
         T_P_WFs.append(Time_Propagated_Wavefunction_Reader(TDSE))
         F_F_WFs.append(Field_Free_Wavefunction_Reader(Target))
 
     for TDSE, Target, T_P_WF, F_F_WF in zip(TDSE_files, Target_files, T_P_WFs, F_F_WFs):
-        Population, n_l_pop, l_m_pop, n_m_pop, n_l_pop_fixed_m, n_m_pop_fixed_l = Population_Calculator(TDSE, Target, T_P_WF, F_F_WF)
+        Population, n_l_pop, l_m_pop, n_m_pop, n_l_pop_fixed_m, n_m_pop_fixed_l, l_m_pop_fixed_n = Population_Calculator(TDSE, Target, T_P_WF, F_F_WF)
         Populations.append(Population)
         n_l_pops.append(n_l_pop)
         l_m_pops.append(l_m_pop)
         n_m_pops.append(n_m_pop)
         n_l_pop_fixed_ms.append(n_l_pop_fixed_m)
         n_m_pop_fixed_ls.append(n_m_pop_fixed_l)
-    return(Populations, n_l_pops, l_m_pops, n_m_pops, n_l_pop_fixed_ms, n_m_pop_fixed_ls, TDSE_files, Target_files, file_names)
+        l_m_pop_fixed_ns.append(l_m_pop_fixed_n)
+    return(Populations, n_l_pops, l_m_pops, n_m_pops, n_l_pop_fixed_ms, n_m_pop_fixed_ls, l_m_pop_fixed_ns, TDSE_files, Target_files, Pulse_files, file_names)
 
 def Resonance_Condition(N_Photon, Energy, w=0.057):
     I = Symbol('I')

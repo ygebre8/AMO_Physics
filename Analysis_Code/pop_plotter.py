@@ -47,63 +47,60 @@ def M_Distribution_N(Population):
     n_array_pos = {}
     n_array_neg = {}
     n_values = np.arange(1, 15)
+    excit = 0.0
     for n in n_values:
         n_array_pos[n] = 0.0
         n_array_neg[n] = 0.0
 
     for k in Population.keys():
         n = k[0]
+        if n != 1:
+            excit += Population[k]
+    for k in Population.keys():
+        n = k[0]
         m = k[2]
         if m > 0:
-            n_array_pos[n] += Population[k]
+            n_array_pos[n] += Population[k] 
         if m < 0:
-            n_array_neg[n] += Population[k]
+            n_array_neg[n] += Population[k] 
 
     ratio = {}
     white = {}
     blue_bar= {}
     white_two = {}
-    
-    max = 0
-    min = 0
+
     for n in n_values:
         if n == 1:
             continue
-        ratio[n] = (n_array_neg[n] / n_array_pos[n])
-        
-        
-
-        if ratio[n] > max:
-            max = ratio[n]
-        if ratio[n] < min:
-            min = ratio[n]
-
+        ratio[n] = (n_array_neg[n] - n_array_pos[n]) / (n_array_neg[n] + n_array_pos[n]) 
+       
         white[n] = pow(10,0)
         if ratio[n] < pow(10, 0):
             blue_bar[n] = pow(10, 0)
             white_two[n] = ratio[n]
         else:
             blue_bar[n] = 0.0
-    # plt.plot(n_array_pos.keys(), n_array_pos.values())
-    plt.axhline(y=1, color='r')
-    plt.bar(list(ratio.keys())[0:], list(ratio.values())[0:], align='center', alpha=1, color = 'darkblue')
-    plt.bar(list(white.keys())[0:], list(white.values())[0:], align='center', alpha=1, color = 'white')
-    plt.bar(list(blue_bar.keys())[0:], list(blue_bar.values())[0:], align='center', alpha=1, color = 'darkblue')
-    plt.bar(list(white_two.keys())[0:], list(white_two.values())[0:], align='center', alpha=1, color = 'white')
     
+   
+    # plt.plot(list(ratio.keys())[0:], list(ratio.values())[0:],  'o')
+    plt.bar(list(ratio.keys())[0:], list(ratio.values())[0:], align='center', alpha=1, color = 'darkblue')
+    # plt.bar(list(white.keys())[0:], list(white.values())[0:], align='center', alpha=1, color = 'white')
+    # plt.bar(list(blue_bar.keys())[0:], list(blue_bar.values())[0:], align='center', alpha=1, color = 'darkblue')
+    # plt.bar(list(white_two.keys())[0:], list(white_two.values())[0:], align='center', alpha=1, color = 'white')
+    plt.axhline(y=0, color='r')
     
     # plt.title("negative m / positive m")
     
     plt.xlabel("N Quantum Number")
     plt.ylabel("Ratio")
-    plt.yscale('symlog')
+    # plt.yscale('symlog')
 
     xticks = n_values
     plt.xticks(xticks)
     plt.xlim(2.5, 15)
     
-    # plt.ylim(pow(10, -2)  , pow(10,2))
-    plt.savefig("N_Distribution_3o33-13_6o66-13.png")
+    plt.ylim(-1.1, 1.1)
+    plt.savefig("N_Distribution_2o75-13_5-13.png")
 
 def L_Distribution(Population):
     excit = 0.0

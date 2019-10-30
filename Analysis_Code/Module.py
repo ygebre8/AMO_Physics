@@ -163,7 +163,7 @@ def N_L_Population_Plotter(n_l_pop, TDSE_file, Target_file, m_value = None, vmax
         else:
             vmaxlog = int(np.log10(vmax))
     
-    vmaxlog = -2 
+    # vmaxlog = -2 
     print(vmaxlog)
     label = [pow(10, i) for i in range(vmaxlog - 5, vmaxlog)]
     vmax_num = pow(10, vmaxlog)
@@ -188,7 +188,7 @@ def N_L_Population_Plotter(n_l_pop, TDSE_file, Target_file, m_value = None, vmax
 
 
     if m_value == None:
-        plt.title("N and L states population for Counter-Rotating", fontsize=11)
+        plt.title("N and L states population for Co-Rotating", fontsize=11)
     else:
         plt.title("N and L states population for m = " + str(m_value))
     
@@ -214,15 +214,15 @@ def N_L_Population_Fixed_M(n_l_pop_fixed_m, TDSE_file, Target_file):
         if abs(m) > 10: #n_max - 1:
             continue
         if m >= 0:
-            file_name = "Population_Counter-Rotating_For_M=" + str(m).zfill(2) + ".png" 
+            file_name = "Population_Co-Rotating_For_M=" + str(m).zfill(2) + ".png" 
         else:
-            file_name = "Population_Counter-Rotating_For_M=" + str(m).zfill(3) + ".png"
+            file_name = "Population_Co-Rotating_For_M=" + str(m).zfill(3) + ".png"
         N_L_Population_Plotter(n_l_pop_fixed_m[m], TDSE_file, Target_file, m, vmax, file_name)
 
 def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax = None, file_name = "N_M_Population_Counter_Rotating.png"):
     
     n_max = int(Target_file['Energy_l_0'].size / 2)
-    n_values = np.arange(1, n_max + 1)
+    n_values = np.arange(2, n_max + 1)
     m_values = np.array(TDSE_file['Wavefunction']['m_values']) 
     m_max = 2 * np.amax(m_values) + 1
     heat_map = np.zeros(shape=(n_max + 1, m_max))
@@ -248,9 +248,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
         else:
             vmaxlog = int(np.log10(vmax))
     
-    label = [pow(10, i) for i in range(vmaxlog - 7, vmaxlog)]
-    vmax_num = pow(10, vmaxlog)
-    vmin_num = pow(10,  -10)
+    label = [pow(10, i) for i in range(vmaxlog - 6, vmaxlog)]
+    vmax_num = pow(10, vmaxlog - 0.9)
+    vmin_num = pow(10,  -6)
 
     for n in n_values:
         for m in m_values:
@@ -265,13 +265,13 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
     axes = sns.heatmap(heat_map, norm=colors.LogNorm(), yticklabels=ylabel, xticklabels=xlabel, linewidths=.5, 
     cmap="viridis", annot=False, cbar_kws={"ticks":label},  vmin=vmin_num, vmax=vmax_num)
 
-    plt.ylim(1, n_max + 1)
+    plt.ylim(2, n_max + 1)
     # if(l_value == None):
     plt.xlim(np.amax(m_values) - n_max + 1, np.amax(m_values) + n_max)
     # else:
     #     plt.xlim(np.amax(m_values) - l_value + 1, np.amax(m_values) + l_value)
-    plt.xlabel('m_values', fontsize=12)
-    plt.ylabel('n_values', fontsize=12)
+    plt.xlabel('m', fontsize=12)
+    plt.ylabel('n', fontsize=12)
 
     if l_value == None:
         plt.title("N and M states population Counter_Rotating", fontsize=12)
@@ -302,7 +302,7 @@ def L_M_Population_Fixed_N(l_m_pop_fixed_n, TDSE_file, Target_file):
         if(vmax_current > vmax):
             vmax = vmax_current
     for n in l_m_pop_fixed_n.keys():
-        file_name = "Population_Counter-Rotating_For_N=" + str(n).zfill(2) + ".png"
+        file_name = "Population_Co-Rotating_For_N=" + str(n).zfill(2) + ".png"
         L_M_Population_Plotter(l_m_pop_fixed_n[n], TDSE_file, Target_file, n, vmax, file_name)
  
 def L_M_Population_Plotter(l_m_pop, TDSE_file, Target_file, n_value = None, vmax = None, file_name = "L_M_Population.png"):

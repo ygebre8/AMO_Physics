@@ -254,9 +254,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
         else:
             vmaxlog = int(np.log10(vmax))
     
-    label = [pow(10, i) for i in range(vmaxlog - 10, vmaxlog)]
+    label = [pow(10, i) for i in range(vmaxlog - 7, vmaxlog)]
     vmax_num = pow(10, vmaxlog)
-    vmin_num = pow(10,  -10)
+    vmin_num = pow(10,  -7)
 
     for n in n_values:
         for m in m_values:

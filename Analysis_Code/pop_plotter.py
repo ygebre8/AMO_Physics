@@ -8,18 +8,23 @@ import matplotlib.ticker as tick
 plt.switch_backend('agg') 
 
 Populations, n_l_pops, l_m_pops, n_m_pops, n_l_pop_fixed_ms, n_m_pop_fixed_ls, l_m_pop_fixed_ns, TDSE_files, Target_files, Pulse_files, file_names = Module.File_Organizer(sys.argv)
-Module.N_L_Population_Plotter(n_l_pops[0], TDSE_files[0], Target_files[0], file_name = "Co_Rotating_5_13.png")
-Module.N_M_Population_Plotter(n_m_pops[0], TDSE_files[0], Target_files[0], file_name = "N_M_Population_Co_Rotating_5_13.png")
+# Module.N_L_Population_Plotter(n_l_pops[0], TDSE_files[0], Target_files[0], file_name = "Co_Rotating_5_13.png")
+# Module.N_M_Population_Plotter(n_m_pops[0], TDSE_files[0], Target_files[0], file_name = "N_M_Population_Co_Rotating_5_13.png")
 # Module.N_L_Population_Fixed_M(n_l_pop_fixed_ms[0], TDSE_files[0], Target_files[0])
 # Module.L_M_Population_Fixed_N(l_m_pop_fixed_ns[0], TDSE_files[0], Target_files[0])
 
 pop = Populations[0]
 # error = {}
-
+# ion = 0.0
 # for k in pop.keys():
-#     error[k] = abs(Populations[1][k] - Populations[0][k])
+#     l = k[1]
     
+#     ion += Populations[0][k]
 
+#     if Populations[0][k] > pow(10, -3):
+#         print(k, Populations[0][k])
+    
+# print("ionization", 1.0 - ion)
 #     norm += pop[k]
 #     print(k, pop[k])
 # print(norm)
@@ -157,19 +162,34 @@ def L_Distribution(Population):
             excit += Population[k]
         
     l_array = {}
+    l_array_pos_m = {}
+    l_array_neg_m = {}
+
     l_values = np.arange(1,15)
+
     for l in l_values:
         l_array[l] = 0.0
+        l_array_neg_m[l] = 0.0
+        l_array_pos_m[l] = 0.0
+
     for k in Population.keys():
-        l = k[1]
         n = k[0]
+        l = k[1]
+        m = k[2]
         if l==0:
             continue
+        if m > 0:
+            l_array_pos_m[l] += Population[k]/ excit
+        if m < 0:
+            l_array_neg_m[l] += Population[k]/ excit
+
         l_array[l] += Population[k]# / excit
     
 
-    plt.bar(l_array.keys(), l_array.values(), align='center', alpha=1, log=True, color = 'darkblue')
-    # plt.title()
+    # plt.bar(l_array.keys(), l_array.values(), align='center', alpha=1, log=True, color = 'darkblue')
+    
+    plt.bar(l_array_neg_m.keys(), l_array_neg_m.values(), align='center', alpha=1, log=True, color = 'red')
+    
     label = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"]
     plt.xlabel("l Quantum Number")
     plt.ylabel("Population")
@@ -179,10 +199,22 @@ def L_Distribution(Population):
 
     # plt.axvline(x=3, color='red', linewidth=3.0)
 
-    # plt.ylim(pow(10,-4), pow(10, 0))
-    plt.savefig("1_12-5_13.png")
+    plt.ylim(pow(10,-4), pow(10, 0))
+    plt.savefig("5_12-5_13_L_Dist_Neg.png")
+    plt.clf()
 
+    plt.bar(l_array_pos_m.keys(), l_array_pos_m.values(), align='center', alpha=1, log=True, color = 'darkblue')
+    plt.xlabel("l Quantum Number")
+    plt.ylabel("Population")
+    plt.xticks(l_values, label)
+    v=list(l_array.values())
+    k=list(l_array.keys())
+
+    # plt.axvline(x=3, color='red', linewidth=3.0)
+
+    plt.ylim(pow(10,-4), pow(10, 0))
+    plt.savefig("5_12-5_13_L_Dist_Pos.png")
 
 # Weighted_M_distribution(Populations[0])
 
-# L_Distribution(Populations[0])
+L_Distribution(Populations[0])

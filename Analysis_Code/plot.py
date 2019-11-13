@@ -1,16 +1,25 @@
-import numpy as np
-import matplotlib.pyplot as plt
+if True:
+    import numpy as np
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    
 
+def Fun(eps, q = 1):
+    bgr = 1/(1+q*q)
+    res = np.power((q+eps),2.0)/(1+eps*eps)
+    return bgr * res
 
+eps = np.linspace(-20, 20, 500)
+# plt.plot(eps, Fun(eps))
+plt.plot(eps, Fun(eps, 1.5))
+plt.title("Fano-lineshape")
 
-### Ratio1
+plt.xlabel(r'Reduced Energy $\epsilon$ ')
+plt.ylabel(r'$|1-S|^2$')
 
-Counter_Ratio_1 =  np.array([2.16, 21.9, 82.53, 99.24])
-Counter_Ratio_1_x = np.array([0.5, 1, 2, 3])
+plt.axvline(x= 1.5 , color='r')
 
-Co_Rotating_Ratio_1 = np.array([0.9, 11.25, 79.94, 99.18])
-Co_Rotating_Ratio_1_x = np.array([0.5, 1, 2, 3])
+# plt.plot(eps, Fun(eps, 2.5))
 
-plt.plot(Counter_Ratio_1_x, Counter_Ratio_1)
-plt.title("Corotating Ratio 1")
-plt.savefig("Corotating_Ratio_1.png")
+plt.savefig("pic.png")

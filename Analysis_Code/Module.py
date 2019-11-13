@@ -33,6 +33,12 @@ def Time_Propagated_Wavefunction_Reader(TDSE_file):
 		T_P_WF[(l_values[i], m_values[i])] = np.array(psi[r_ind_lower: r_ind_upper])
 		r_ind_lower = r_ind_upper
 		r_ind_upper = r_ind_upper + r_ind_max
+        
+	norm = 0.0
+	for k in T_P_WF.keys():
+		norm += np.vdot(T_P_WF[k], T_P_WF[k])
+    	
+	print(norm)
 
 	return T_P_WF
 
@@ -248,9 +254,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
         else:
             vmaxlog = int(np.log10(vmax))
     
-    label = [pow(10, i) for i in range(vmaxlog - 6, vmaxlog)]
-    vmax_num = pow(10, vmaxlog - 0.9)
-    vmin_num = pow(10,  -6)
+    label = [pow(10, i) for i in range(vmaxlog - 10, vmaxlog)]
+    vmax_num = pow(10, vmaxlog)
+    vmin_num = pow(10,  -10)
 
     for n in n_values:
         for m in m_values:
@@ -274,9 +280,9 @@ def N_M_Population_Plotter(n_m_pop, TDSE_file, Target_file, l_value = None, vmax
     plt.ylabel('n', fontsize=12)
 
     if l_value == None:
-        plt.title("N and M states population Counter_Rotating", fontsize=12)
+        plt.title("N and M states population Co_Rotating", fontsize=12)
     else:
-        plt.title("N and M states population Counter_Rotating for l = " + str(l_value), fontsize=12)
+        plt.title("N and M states population Co_Rotating for l = " + str(l_value), fontsize=12)
 
     plt.savefig(file_name)
     plt.show()

@@ -8,11 +8,25 @@ import matplotlib.ticker as tick
 plt.switch_backend('agg') 
 
 Populations, n_l_pops, l_m_pops, n_m_pops, n_l_pop_fixed_ms, n_m_pop_fixed_ls, l_m_pop_fixed_ns, TDSE_files, Target_files, Pulse_files, file_names = Module.File_Organizer(sys.argv)
-# Module.N_L_Population_Plotter(n_l_pops[0], TDSE_files[0], Target_files[0], file_name = "Co_Rotating.png")
-# Module.N_M_Population_Plotter(n_m_pops[0], TDSE_files[0], Target_files[0], file_name = "N_M_Population_Counter_Rotating_Rescaled.png")
+Module.N_L_Population_Plotter(n_l_pops[0], TDSE_files[0], Target_files[0], file_name = "Co_Rotating_5_13.png")
+Module.N_M_Population_Plotter(n_m_pops[0], TDSE_files[0], Target_files[0], file_name = "N_M_Population_Co_Rotating_5_13.png")
 # Module.N_L_Population_Fixed_M(n_l_pop_fixed_ms[0], TDSE_files[0], Target_files[0])
 # Module.L_M_Population_Fixed_N(l_m_pop_fixed_ns[0], TDSE_files[0], Target_files[0])
 
+pop = Populations[0]
+# error = {}
+
+# for k in pop.keys():
+#     error[k] = abs(Populations[1][k] - Populations[0][k])
+    
+
+#     norm += pop[k]
+#     print(k, pop[k])
+# print(norm)
+# plt.semilogy(error.values(), '.')
+# plt.semilogy(Populations[1].values(), '.')
+
+# plt.savefig("pop.png")
 
 def M_Distribution(Population):
     m_array = {}
@@ -100,7 +114,41 @@ def M_Distribution_N(Population):
     plt.xlim(2.5, 15)
     
     plt.ylim(-1.1, 1.1)
-    plt.savefig("N_Distribution_2o75-13_5-13.png")
+    plt.savefig("N_Distribution_Ratio05.png")
+
+def Weighted_M_distribution(Population):
+    n_array = {}
+    n_array_total = {}
+    n_values = np.arange(1,15)
+
+    for n in n_values:
+        n_array[n] = 0.0
+        n_array_total[n] = 0.0
+
+    for k in Population.keys():
+        n = k[0]
+        n_array_total[n] += Population[k]
+    
+    for k in Population.keys():
+        n = k[0]
+        m = k[2]
+        n_array[n] += m*Population[k] / n_array_total[n]
+
+    plt.bar(list(n_array.keys())[0:], list(n_array.values())[0:], align='center', alpha=1, color = 'darkblue')
+    plt.axhline(y=0, color='r')
+    
+    plt.title("Weighted M Distribution")
+    
+    plt.xlabel("N Quantum Number")
+    plt.ylabel("Weighted M")
+    # plt.yscale('symlog')
+
+    xticks = n_values
+    plt.xticks(xticks)
+    plt.xlim(2.5, 15)
+    
+    # plt.ylim(-1.1, 1.1)
+    plt.savefig("N_Distribution_Ratio05.png")
 
 def L_Distribution(Population):
     excit = 0.0
@@ -117,7 +165,7 @@ def L_Distribution(Population):
         n = k[0]
         if l==0:
             continue
-        l_array[l] += Population[k] / excit
+        l_array[l] += Population[k]# / excit
     
 
     plt.bar(l_array.keys(), l_array.values(), align='center', alpha=1, log=True, color = 'darkblue')
@@ -129,12 +177,12 @@ def L_Distribution(Population):
     v=list(l_array.values())
     k=list(l_array.keys())
 
-    plt.axvline(x=3, color='red', linewidth=3.0)
+    # plt.axvline(x=3, color='red', linewidth=3.0)
 
-    plt.ylim(pow(10,-4), pow(10, 0))
-    plt.savefig("5_13-5_12.png")
+    # plt.ylim(pow(10,-4), pow(10, 0))
+    plt.savefig("1_12-5_13.png")
 
 
-M_Distribution_N(Populations[0])
+# Weighted_M_distribution(Populations[0])
 
 # L_Distribution(Populations[0])

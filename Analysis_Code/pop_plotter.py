@@ -14,10 +14,13 @@ Populations, n_l_pops, l_m_pops, n_m_pops, n_l_pop_fixed_ms, n_m_pop_fixed_ls, l
 # Module.L_M_Population_Fixed_N(l_m_pop_fixed_ns[0], TDSE_files[0], Target_files[0])
 
 pop = Populations[0]
+ion = 0
 
 for k in pop.keys():
+    ion += pop[k]
     print(k, pop[k])
     
+print(1.0 - ion)
 # error_1 = {}
 # error_2 = {}
 # count = 0

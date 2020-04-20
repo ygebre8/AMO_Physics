@@ -20,7 +20,7 @@ for k in pop.keys():
     ion += pop[k]
     print(k, pop[k])
     
-print(1.0 - ion)
+print((1.0 - ion)*100)
 # error_1 = {}
 # error_2 = {}
 # count = 0

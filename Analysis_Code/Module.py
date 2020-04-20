@@ -581,7 +581,7 @@ def File_Organizer(command_line_arg):
 
     for file in file_names:
         TDSE_files.append(h5py.File(file + "/TDSE.h5"))
-        Target_files.append(h5py.File(file + "/Hydrogen.h5"))
+        Target_files.append(h5py.File(file + "/H.h5"))
         Pulse_files.append(h5py.File(file + "/Pulse.h5"))
 
     for TDSE, Target in zip(TDSE_files, Target_files):

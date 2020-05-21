@@ -1,0 +1,11 @@
+This directory was created by Norio TAKEMOTO 2010-6-4
+as a repository of the slides presented in the Becker
+group meetings.
+
+Anyone can put their presentation slides here by 
+creating a subdirectory.  The subdirectory name 
+should follow the format as below: 
+<YYYY-MM-DD>_<Name>/
+For example, Norio's presentation on 2010-09-03
+can be found under 
+2010-09-03_Norio.
